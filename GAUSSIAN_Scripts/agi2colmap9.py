@@ -839,14 +839,14 @@ class Agi2Colmap():
 
                 print("[ INFO ] Matrix 5 Saved in %s" %(matrix_5_path))
                 
-                matrix_6 = np.zeros_like(matrix_5)
-                for index, cam_pose in enumerate(self.st.cam_pose_list):
-                    point = cam_pose.T[0:2]
-                    for block_index, quad in enumerate(self.st.quad_list):
-                        if is_point_inside_quad(quad, point):
-                            matrix_6[index, block_index] = 1
+            matrix_6 = np.zeros_like(matrix_5)
+            for index, cam_pose in enumerate(self.st.cam_pose_list):
+                point = cam_pose.T[0:2]
+                for block_index, quad in enumerate(self.st.quad_list):
+                    if is_point_inside_quad(quad, point):
+                        matrix_6[index, block_index] = 1
 
-                matrix_7 = np.logical_or(matrix_6, matrix_5).astype(int)
+            matrix_7 = np.logical_or(matrix_6, matrix_5).astype(int)
 
             print("[ INFO ] Selecting Images.")
 
