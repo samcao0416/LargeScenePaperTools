@@ -38,6 +38,17 @@ Step 7. Crop Mesh and get corresponding matrix
         colnum_num : block_num
         element    : 1(kept) / 0 (not kept)
 
+    matrix_6:
+        row_num    : view_num
+        colnum_num : block_num
+        if camera is in the block, element = 1
+        element    : 1(kept) / 0 (not kept)
+
+    matrix_7:
+        row_num    : view_num
+        colnum_num : block_num
+        matrix_7 = (matrix_5 or matrix_6)
+
 Step 8. Use the matrix to select images
 Step 9. Save Images
 Step 10. Save Cameras
@@ -827,6 +838,15 @@ class Agi2Colmap():
                 np.save(matrix_5_path, matrix_5)
 
                 print("[ INFO ] Matrix 5 Saved in %s" %(matrix_5_path))
+                
+                matrix_6 = np.zeros_like(matrix_5)
+                for index, cam_pose in enumerate(self.st.cam_pose_list):
+                    point = cam_pose.T[0:2]
+                    for block_index, quad in enumerate(self.st.quad_list):
+                        if is_point_inside_quad(quad, point):
+                            matrix_6[index, block_index] = 1
+
+                matrix_7 = np.logical_or(matrix_6, matrix_5).astype(int)
 
             print("[ INFO ] Selecting Images.")
 
@@ -845,7 +865,7 @@ class Agi2Colmap():
                 for img_index, img_path in enumerate(self.st.cam_pose_list):
 
                     img_path = os.path.join(self.st.cache_img_path, os.path.basename(self.st.cam_pose_list[img_index].img_path))
-                    if matrix_5[img_index, index] == 1:
+                    if matrix_7[img_index, index] == 1:
                         output_img_path = os.path.join(output_img_folder, os.path.basename(img_path))
                         shutil.copy(img_path, output_img_path)
                         new_cam_pose_list.append(self.st.cam_pose_list[img_index])
