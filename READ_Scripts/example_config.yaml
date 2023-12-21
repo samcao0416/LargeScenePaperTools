@@ -1,0 +1,7 @@
+viewport_size: [743, 743]
+intrinsic_matrix: D:/NeuDim/NeuDim_data/Fudi/READ/fudi_agixml.xml
+view_matrix:  D:/NeuDim/NeuDim_data/Fudi/READ/fudi_agixml.xml
+pointcloud: D:/NeuDim/NeuDim_data/Fudi/READ/fudi_Cloud_2cm.ply
+
+net_ckpt:  D:/NeuDim/NeuDim_data/Fudi/READ/UNet_stage_0_epoch_99_net.pth
+texture_ckpt: D:/NeuDim/NeuDim_data/Fudi/READ/PointTexture_stage_0_epoch_99_fudi.pth
