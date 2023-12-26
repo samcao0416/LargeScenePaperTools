@@ -55,7 +55,7 @@ insta_class.process_blocks.crop_mesh_get_matrix2(save_cropped_mesh=True)
 # NOTE: if matrix3 or 4 or 5 is precaculated, change the "False" into "True" to save time.
 # NOTE: Priority: 5 > 4 > 3, which mean is matrix5 is loaded, then matrix3 and matrix4 will be ignored.
 # NOTE: set save_vokf=True to save the poses cloudcompare can read to visualize the selected images.
-insta_class.process_blocks.select_images(threshold=0.8, load_matrix3=False, load_matrix4=True, load_matrix5=False, save_vokf=True) # hyperparameter that control the selection ratio of images. The ratio is the number of triangles seen in the block to the the number of triangles seen in the whole mesh.
+insta_class.process_blocks.select_images(threshold=0.8, load_matrix3=False, load_matrix4=False, load_matrix5=False, save_vokf=True) # hyperparameter that control the selection ratio of images. The ratio is the number of triangles seen in the block to the the number of triangles seen in the whole mesh.
 
 # Or Alternatively, the above six lines can be replaced by the following line
 # insta_class.process_blocks.run_default(quad_expand_threshold=0.3, img_selection_threshold=0.01)
