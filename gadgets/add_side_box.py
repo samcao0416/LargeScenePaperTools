@@ -27,14 +27,14 @@ x_max, y_max, z_max = max_bound
 
 # 3. 在x_min到x_max和y_min到y_max这个距离内，每隔0.5增加一个白色的点
 dist = 1.0
-x_range = np.arange(x_min, x_max, dist)
-y_range = np.arange(y_min, y_max, dist)
-z_range = np.array([z_max])  # 只包含z_max
+# x_range = np.arange(x_min, x_max, dist)
+# y_range = np.arange(y_min, y_max, dist)
+# z_range = np.array([z_max])  # 只包含z_max
 
 
-# 创建顶面的点云
-X, Y, Z = np.meshgrid(x_range, y_range, z_range)
-top_points = np.vstack((X.flatten(), Y.flatten(), Z.flatten())).T
+# # 创建顶面的点云
+# X, Y, Z = np.meshgrid(x_range, y_range, z_range)
+# top_points = np.vstack((X.flatten(), Y.flatten(), Z.flatten())).T
 
 # 创建四个侧面的点云
 side_points = []
@@ -64,7 +64,7 @@ X, Y, Z = np.meshgrid(x_range, y_range, z_range)
 side_points.extend(np.vstack((X.flatten(), Y.flatten(), Z.flatten())).T)
 
 # 合并顶面和侧面的点云
-new_points = np.vstack((top_points, side_points))
+new_points = np.array(side_points)
 new_colors = np.ones((new_points.shape[0], 3))  # 白色
 
 # 创建Open3D点云对象
