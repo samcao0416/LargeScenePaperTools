@@ -8,6 +8,7 @@ import numpy as np
 
 def read_colmap_pose(pose_file):
     poses = []
+    indexes = []
     with open(pose_file, 'r') as f:
         while(True):
             line = f.readline()
@@ -39,8 +40,9 @@ def read_colmap_pose(pose_file):
                 qvec = np.array([qvec[1], qvec[2], qvec[3], qvec[0]])
                 pose = np.concatenate([tvec, qvec])
                 poses.append(pose)
+                indexes.append(image_id)
 
-    return poses
+    return poses, indexes
 
 
 
@@ -101,7 +103,7 @@ def Init_photograph(dom, Photogroups, width_str='1920', height_str='1920'):
 def output_extrinsic_xml(pose_file,image_folder,xml_file):
     posix = 'jpg'
     # poses = pd.read_csv(pose_file,delimiter=' ',header=None).values
-    poses = read_colmap_pose(pose_file)
+    poses, indexes = read_colmap_pose(pose_file)
     image_files = glob.glob(image_folder+"/*.{}".format(posix))
 
     dom = minidom.Document()
@@ -138,12 +140,21 @@ def output_extrinsic_xml(pose_file,image_folder,xml_file):
         R = Rotation.as_matrix(Rotation.from_quat(pose[3:]))
         t = pose[0:3]
         # timestamp = float(pose[0])
-        image_file = image_files[index]
+        if len(poses) == len(image_files):
+            image_file = image_files[index]
+        else:
+            temp_file_name = "%06d.jpg" % (index)
+            image_file = None
+            for file_path in image_files:
+                if os.path.basename(file_path) == temp_file_name:
+                    image_file = file_path
+                    break
+        
+        if image_file is not None:
+            file_first_name = image_file.split('/')[-1].replace('images\\', '')
 
-        file_first_name = image_file.split('/')[-1].replace('images\\', '')
-
-        write_extern(file_first_name, R, t, dom, Photogroup, photo_idx, 0)
-        photo_idx += 1
+            write_extern(file_first_name, R, t, dom, Photogroup, photo_idx, 0)
+            photo_idx += 1
 
     with open(xml_file,'w',encoding='UTF-8') as fh:
         dom.writexml(fh,indent='',addindent='\t',newl='\n',encoding='UTF-8')
