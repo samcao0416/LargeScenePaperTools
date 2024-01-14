@@ -2,13 +2,14 @@ import glob
 import sys
 from xml.dom import minidom
 import pandas as pd
-from scipy.spatial.transform.rotation import Rotation
+from scipy.spatial.transform import Rotation
 import os
 import numpy as np
 
 def read_colmap_pose(pose_file):
     poses = []
     indexes = []
+    image_names = []
     with open(pose_file, 'r') as f:
         while(True):
             line = f.readline()
@@ -41,8 +42,9 @@ def read_colmap_pose(pose_file):
                 pose = np.concatenate([tvec, qvec])
                 poses.append(pose)
                 indexes.append(image_id)
+                image_names.append(image_name)
 
-    return poses, indexes
+    return poses, indexes, image_names
 
 
 
@@ -101,9 +103,10 @@ def Init_photograph(dom, Photogroups, width_str='1920', height_str='1920'):
     return Photogroup
 
 def output_extrinsic_xml(pose_file,image_folder,xml_file):
-    posix = 'jpg'
+    
     # poses = pd.read_csv(pose_file,delimiter=' ',header=None).values
-    poses, indexes = read_colmap_pose(pose_file)
+    poses, indexes, image_names = read_colmap_pose(pose_file)
+    posix = image_names[0][-4:]
     image_files = glob.glob(image_folder+"/*.{}".format(posix))
 
     dom = minidom.Document()
@@ -137,19 +140,25 @@ def output_extrinsic_xml(pose_file,image_folder,xml_file):
     photo_idx = 0
 
     for index, pose in enumerate(poses):
+        extrinsics = np.eye(4)
         R = Rotation.as_matrix(Rotation.from_quat(pose[3:]))
         t = pose[0:3]
+        extrinsics[:3, :3] = R
+        extrinsics[:3, 3] = t
+        extrinsics = np.linalg.inv(extrinsics)
+        R = extrinsics[:3, :3]
+        t = extrinsics[:3, 3]
         # timestamp = float(pose[0])
-        if len(poses) == len(image_files):
-            image_file = image_files[index]
-        else:
-            temp_file_name = "%06d.jpg" % (index)
-            image_file = None
-            for file_path in image_files:
-                if os.path.basename(file_path) == temp_file_name:
-                    image_file = file_path
-                    break
-        
+        # if len(poses) == len(image_files):
+        #     image_file = image_files[index]
+        # elif len(poses) > len(image_files):
+        #     temp_file_name = "%06d.jpg" % (index)
+        #     image_file = None
+        #     for file_path in image_files:
+        #         if os.path.basename(file_path) == temp_file_name:
+        #             image_file = file_path
+        #             break
+        image_file = image_names[index]
         if image_file is not None:
             file_first_name = image_file.split('/')[-1].replace('images\\', '')
 
@@ -165,7 +174,7 @@ if __name__ == "__main__":
     if os.path.basename(path) != "images.txt":
         raise ValueError("Path should end up with images.txt")
     print(path)
-    folder = os.path.dirname(path)
+    folder = os.path.dirname(os.path.dirname(os.path.dirname(path)))
     image_folder = folder + '/images'
     xml_file = folder + '/camera_extern.xml'
     output_extrinsic_xml(path,image_folder,xml_file)

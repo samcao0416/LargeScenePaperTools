@@ -131,7 +131,6 @@ class colmap_gaussian:
         self.image_paths = []
         for ext in img_exts:
             self.image_paths += natsorted(glob(os.path.join(self.img_path, "*." + ext)))
-
         # for img_path in tqdm(image_paths):
         #     image = cv2.imread(img_path)
         #     self.images.append(image)
@@ -246,7 +245,7 @@ class colmap_gaussian:
                 continue
             extrinsics_node = ele.find('transform')
             pose = np.array(extrinsics_node.text.split()).astype(np.float32).reshape(4, 4)
-            image_path = os.path.basename(ele.get("label") + ".jpg")
+            image_path = os.path.basename(ele.get("label") + ".JPG")
 
             if image_path not in img_basename_list:
                 raise FileNotFoundError("Image %s not found" %image_path)
