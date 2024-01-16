@@ -16,6 +16,7 @@ def parse():
     parser.add_argument("-mesh", "--mesh_path", type=str, required=True, help = "Path of original mesh without texture")
     parser.add_argument("-txt", "--txt_path", type=str, required=True, help = "Path of point picking list")
     parser.add_argument("-out", "--output_folder", type=str, default=None, help = "Path of output folders")
+    parser.add_argument("-num", "--target_number", type = int, default=5000000, help = "Target number of faces")
 
     args = parser.parse_args()
 
@@ -78,6 +79,8 @@ if __name__ == "__main__":
     else:
         output_folder = args.output_folder
 
+    target_num = args.target_number
+
     print(output_folder)
 
     os.makedirs(output_folder, exist_ok=True)
@@ -94,7 +97,7 @@ if __name__ == "__main__":
 
         ms = ml.MeshSet()
         ms.load_new_mesh(cropped_mesh_path)
-        ms.apply_filter("meshing_decimation_quadric_edge_collapse", targetfacenum=2000000)
+        ms.apply_filter("meshing_decimation_quadric_edge_collapse", targetfacenum=target_num)
 
         ms.save_current_mesh(cropped_mesh_path)
 
