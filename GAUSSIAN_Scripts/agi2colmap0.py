@@ -245,7 +245,7 @@ class colmap_gaussian:
                 continue
             extrinsics_node = ele.find('transform')
             pose = np.array(extrinsics_node.text.split()).astype(np.float32).reshape(4, 4)
-            image_path = os.path.basename(ele.get("label") + ".JPG")
+            image_path = os.path.basename(ele.get("label") + ".jpg")
 
             if image_path not in img_basename_list:
                 raise FileNotFoundError("Image %s not found" %image_path)
@@ -342,5 +342,5 @@ if __name__ == "__main__":
     #         At the same time, resize and save all the calibrated images
     colmap_files.save_extrinsic_image()
     # Step 4. Downsample the pointcloud and save it into point3D.ply
-    colmap_files.save_pointcloud()
+    # colmap_files.save_pointcloud()
     
