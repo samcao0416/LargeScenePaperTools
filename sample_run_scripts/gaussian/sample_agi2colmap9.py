@@ -8,16 +8,17 @@ from GAUSSIAN_Scripts.agi2colmap9 import Agi2Colmap, IndexRange
 
 import numpy as np
 
+raw_data_folder = r"E:\SkdPaper\raw_data_bak\demo_1215\SIG_ALL" # Change this line to your own path
+output_folder = r"E:\SkdPaper\demo_1215\SIG_ALL" # Change this line to your own path
 
+K_xml_path = os.path.join(raw_data_folder, "result", "cam_insta.xml")
 
-K_xml_path = r"E:\SkdPaper\raw_data_bak\demo_1215\SIG_ALL\result\cam_insta.xml"
-
-insta_class = Agi2Colmap(xml_path=r"E:\SkdPaper\raw_data_bak\demo_1215\SIG_ALL\result\poses.xml",
-                         img_folder=r"E:\SkdPaper\raw_data_bak\demo_1215\SIG_ALL\result\images",
-                         ply_path=r"E:\SkdPaper\raw_data_bak\demo_1215\SIG_ALL\result\result_4cm.ply",
-                         mesh_path=r"E:\SkdPaper\raw_data_bak\demo_1215\SIG_ALL\result\mesh_small.ply",
-                         point_pick_txt_path=r"E:\SkdPaper\demo_1215\SIG_ALL\picking_list.txt",
-                         output_path=r"E:\SkdPaper\demo_1215\SIG_ALL",
+insta_class = Agi2Colmap(xml_path=os.path.join(raw_data_folder,"result", "poses.xml"),
+                         img_folder=os.path.join(raw_data_folder,"result", "images"),
+                         ply_path=os.path.join(raw_data_folder,"result", "result_4cm.ply"),
+                         mesh_path=os.path.join(raw_data_folder,"temp", "mesh.ply"),
+                         point_pick_txt_path=os.path.join(output_folder,"picking_list.txt"),
+                         output_path=output_folder,
                          data_type="insta")
 
 insta_class.check_files.run()
