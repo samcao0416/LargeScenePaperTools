@@ -204,8 +204,8 @@ class Agi2Colmap():
     
             try:
                 xml_tree = ET.parse(self.st.xml_path)
-                print("[ INFO ] XML OK. ")
                 self.st.photo_xml = xml_tree.getroot().find("Block").find("Photogroups")
+                print("[ INFO ] XML OK. ")
             except:
                 raise FileNotFoundError("[ ERROR ] XML doesn't exists")
             
@@ -954,6 +954,11 @@ class Agi2Colmap():
 
             return new_ply
 
+    def ClearCache(self):
+        if os.name == "nt":
+            os.system("rmdir /s /q %s" % (self.cache_path))
+        elif os.name == "posix":
+            os.system("rm -rf %s " %(self.cache_path))
 
         
 def cross_product(p1, p2):

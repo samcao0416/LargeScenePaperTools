@@ -6,6 +6,14 @@ import pandas as pd
 from scipy.spatial.transform import Rotation
 
 
+def get_file_dirname1(file_first_name):
+    file_first_name = file_first_name.split('images/')[-1]
+    return file_first_name
+
+def get_file_dirname2(file_first_name):
+    file_first_name = file_first_name.split('images\\')[-1]
+    return file_first_name
+
 def write_extern(filename, rotate, center, dom, Photogroup, idx, frame_count=0):
     Photo = dom.createElement('Photo')
     Photogroup.appendChild(Photo)
@@ -113,6 +121,12 @@ def output_extrinsic_xml(pose_file,image_folder,xml_file):
 
     photo_idx = 0
 
+    file_first_name = image_files[0].split('/')[-1]
+    if os.path.dirname(file_first_name.split('images\\')[-1]) == "":
+        get_file_dirname = get_file_dirname1
+    else:
+        get_file_dirname = get_file_dirname2
+
     for pose in poses:
         R = Rotation.as_matrix(Rotation.from_quat(pose[4:]))
         t = pose[1:4]
@@ -122,7 +136,7 @@ def output_extrinsic_xml(pose_file,image_folder,xml_file):
 
             if abs(image_timestamp-timestamp)<0.001:
                 file_first_name = image_file.split('/')[-1]
-                file_first_name = file_first_name.split('images\\')[-1]
+                file_first_name = get_file_dirname(file_first_name)
                 file_first_name = file_first_name.split('.jpg')[0]
                 file_first_name = file_first_name + ".jpg"
                 write_extern(file_first_name, R, t, dom, Photogroup, photo_idx, 0)

@@ -61,3 +61,7 @@ insta_class.process_blocks.select_images(threshold=0.8, load_matrix3=False, load
 # Or Alternatively, the above six lines can be replaced by the following line
 # insta_class.process_blocks.run_default(quad_expand_threshold=0.3, img_selection_threshold=0.01)
 # quad_expand_threshold and img_selection_threshold are hyperparameters
+
+
+# NOTE: If you want to keep the cache files, you can annotated the following lines
+insta_class.ClearCache()

@@ -27,7 +27,7 @@ import shutil
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-xml", "--document_xml", required=True, type = str, help="path to block exchange xml file")
+    parser.add_argument("-xml", "--document_xml", required=True, type = str, help="path to agi xml file")
     parser.add_argument("-img", "--image_path", type = str, required=True , help="path to image folder")
     parser.add_argument("-out", "--output_path", type = str, default=None, help = "path to output colmap files, which can be runed by 3d gaussian")
     parser.add_argument("-ply", "--ply_path", type = str, default=None, help = "path to input pointcloud file")
