@@ -171,10 +171,20 @@ def output_extrinsic_xml(pose_file,image_folder,xml_file):
 if __name__ == "__main__":
     path = sys.argv[1]
     path = path.replace('\\', '/')
-    if os.path.basename(path) != "images.txt":
-        raise ValueError("Path should end up with images.txt")
+    if os.path.basename(path) != "images.txt" \
+        or os.path.basename(path) != "images_train.txt" \
+        or os.path.basename(path) != "images_test.txt" \
+        or os.path.basename(path) != "images_all.txt":
+        raise ValueError("Path should end up with images.txt or images_(train/test/all).txt")
     print(path)
     folder = os.path.dirname(os.path.dirname(os.path.dirname(path)))
     image_folder = folder + '/images'
-    xml_file = folder + '/camera_extern.xml'
+    if os.path.basename(path) == "images.txt":
+        xml_file = folder + '/camera_extern.xml'
+    elif os.path.basename(path) == "images_test.txt":
+        xml_file = folder + '/camera_extern_test.xml'
+    elif os.path.basename(path) == "images_train.txt":
+        xml_file = folder + '/camera_extern_train.xml'
+    elif os.path.basename(path) == "images_all.txt":
+        xml_file = folder + '/camera_extern_all.xml'
     output_extrinsic_xml(path,image_folder,xml_file)
