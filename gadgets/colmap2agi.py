@@ -172,9 +172,9 @@ if __name__ == "__main__":
     path = sys.argv[1]
     path = path.replace('\\', '/')
     if os.path.basename(path) != "images.txt" \
-        or os.path.basename(path) != "images_train.txt" \
-        or os.path.basename(path) != "images_test.txt" \
-        or os.path.basename(path) != "images_all.txt":
+        and os.path.basename(path) != "images_train.txt" \
+        and os.path.basename(path) != "images_test.txt" \
+        and os.path.basename(path) != "images_all.txt":
         raise ValueError("Path should end up with images.txt or images_(train/test/all).txt")
     print(path)
     folder = os.path.dirname(os.path.dirname(os.path.dirname(path)))
